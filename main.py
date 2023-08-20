@@ -1,4 +1,6 @@
-
+#
+#Sinalizaçao
+#
 
 #abrir arquivo
 f = open("sinalização.csv")
