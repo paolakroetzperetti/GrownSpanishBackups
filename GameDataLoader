@@ -1,0 +1,19 @@
+class GameDataLoader:
+    def __init__(self, filename):
+        self.filename = filename
+
+    def load_data(self):
+        data = []
+        with open(self.filename, "r") as file:
+            for line in file:
+                # Tratar a coluna "Release date" removendo as vírgulas
+                line = self._remove_commas_in_release_date(line)
+                data.append(line.strip().split(",")) 
+        return data
+
+    def _remove_commas_in_release_date(self, line):
+        parts = line.split('"') 
+        for i, part in enumerate(parts):
+            if i % 2 == 1:  # As partes ímpares são aquelas entre as aspas
+                parts[i] = part.replace(',', '') 
+        return '"'.join(parts) 
