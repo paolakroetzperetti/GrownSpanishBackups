@@ -1,0 +1,39 @@
+from datetime import datetime
+from GameDataLoader import GameDataLoader
+
+class GameAnalyzer:
+    def __init__(self, game_data):
+        self.game_data = game_data
+
+    def calcular_percentuais(self):
+        total_jogos = len(self.game_data)
+        jogos_gratuitos = sum(1 for jogo in self.game_data if len(jogo) > 6 and jogo[6] != '0.0')
+        jogos_pagos = total_jogos - jogos_gratuitos
+        percentual_gratuitos = (jogos_gratuitos / total_jogos) * 100
+        percentual_pagos = (jogos_pagos / total_jogos) * 100
+        return percentual_gratuitos, percentual_pagos
+
+    def encontrar_anos_mais_jogos(self):
+        anos = {}
+        for jogo in self.game_data:
+            if len(jogo) > 2:
+                release_date = jogo[2].split(", ")[-1]
+                if release_date in anos:
+                    anos[release_date] += 1
+                else:
+                    anos[release_date] = 1
+        if anos:
+            maior_numero_jogos = max(anos.values())
+            anos_mais_jogos = [ano for ano, num_jogos in anos.items() if num_jogos == maior_numero_jogos]
+        else:
+            anos_mais_jogos = []
+        return anos_mais_jogos
+
+    def encontrar_jogo_mais_antigo(self):
+        jogos_validos = [jogo for jogo in self.game_data if len(jogo) > 2]
+
+        if not jogos_validos:
+            raise ValueError("Nenhum jogo válido encontrado.")
+
+        jogo_mais_antigo = min(jogos_validos, key=lambda jogo: jogo[2])
+        return jogo_mais_antigo
